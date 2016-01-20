@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Apple</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">helloworld</string>
+    <string name="start">hi start</string>
+    <string name="end">hi end</string>
+</resources>
