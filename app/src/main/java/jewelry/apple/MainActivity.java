@@ -1,6 +1,8 @@
 package jewelry.apple;
 
 import android.os.Bundle;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
@@ -12,7 +14,7 @@ import jewelry.sellTicket.ticket;
 
 public class MainActivity extends AppCompatActivity {
     private TextView text_view = null;
-    private int ticket;
+    private int ticketnum;
 /*
     private Button start = null;
     private Button end = null;
@@ -24,14 +26,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         text_view = (TextView)findViewById(R.id.text_view);
-        ticket = 30;
-        ticket sellTicket = new ticket(ticket,text_view);
+        ticketnum = 30;
+        Handler handler = new Handler();
+        Runnable sellTicket = new ticket(ticketnum,text_view,handler);
         Thread thd1 = new Thread(sellTicket);
-        Thread thd2 = new Thread(sellTicket);
-        Thread thd3 = new Thread(sellTicket);
         thd1.start();
-        thd2.start();
-        thd3.start();
        /* start = (Button)findViewById(R.id.start);
         start.setOnClickListener(new StartClickListener());
         end = (Button)findViewById(R.id.end);
