@@ -7,29 +7,40 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.os.Handler;
+import jewelry.sellTicket.ticket;
 
 
 public class MainActivity extends AppCompatActivity {
     private TextView text_view = null;
+    private int ticket;
+/*
     private Button start = null;
     private Button end = null;
+*/
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         text_view = (TextView)findViewById(R.id.text_view);
-        start = (Button)findViewById(R.id.start);
+        ticket = 30;
+        ticket sellTicket = new ticket(ticket,text_view);
+        Thread thd1 = new Thread(sellTicket);
+        Thread thd2 = new Thread(sellTicket);
+        Thread thd3 = new Thread(sellTicket);
+        thd1.start();
+        thd2.start();
+        thd3.start();
+       /* start = (Button)findViewById(R.id.start);
         start.setOnClickListener(new StartClickListener());
         end = (Button)findViewById(R.id.end);
         end.setOnClickListener(new EndClickListener());
-
+*/
     }
 
     //使用handler时首先要创建一个handler
-    Handler handler = new Handler();
+/*    Handler handler = new Handler();
     //要用handler来处理多线程可以使用runnable接口，这里先定义该接口
     //线程中运行该接口的run函数
     Runnable update_Thread = new Runnable()
@@ -53,13 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
     private class EndClickListener implements View.OnClickListener
     {
         public void onClick(View v) {
             handler.removeCallbacks(update_Thread);
         }
 
-    }
+    }*/
 
 }

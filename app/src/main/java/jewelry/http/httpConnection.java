@@ -14,7 +14,13 @@ import android.os.Handler;
 /**
  * Created by yang on 16-1-20.
  */
-public class httpConnection extends Thread {
+//提示这里并不建议使用Thread 来实现线程,建议实现Runnable接口,
+// 相对于扩展Thread类来说，具有无可比拟的优势。
+// 这种方式不仅有利于程序的健壮性，使代码能够被多个线程共享，
+// 而且代码和数据资源相对独立，从而特别适合多个具有相同代码的线程去处理同一资源的情况。
+// 这样一来，线程、代码和数据资源三者有效分离，很好地体现了面向对象程序设计的思想。
+// 因此，几乎所有的多线程程序都是通过实现Runnable接口的方式来完成的。
+public class httpConnection implements Runnable {
     private String url;
     private WebView webView;
     private Handler handler;
