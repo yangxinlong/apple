@@ -1,10 +1,21 @@
 package jewelry.thread;
 
+import android.os.Message;
+
+import android.os.Handler;
+
 /**
  * Created by yang on 16-1-21.
  */
 public class AutoSaleTicket implements Runnable {
-    private int ticket=30;
+    private int totalticket;
+    private int ticket;
+    private Handler handler;
+    public AutoSaleTicket(int ticket,Handler handler){
+        this.ticket = ticket;
+        this.totalticket =ticket;
+        this.handler = handler;
+    }
     /**
      * Starts executing the active part of the class' code. This method is
      * called when a thread is started that has been created with a class which
@@ -18,10 +29,12 @@ public class AutoSaleTicket implements Runnable {
                 if (ticket > 0) {
 
                     // 不要在同步代码块里面sleep,作用只是自已不执行,也不让线程执行
+                    Message message = new Message();
+                    message.what=1;
                     System.out.println(Thread.currentThread().getName()
-                            + " 卖出 第 " + (20 - ticket + 1) + " 张票");
+                            + " 卖出 第 " + (totalticket-ticket+1) + " 张票");
                     ticket--;
-
+                    handler.sendMessage(message);
                 } else {
                     break;
                 }
