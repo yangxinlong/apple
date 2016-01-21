@@ -1,74 +1,64 @@
 package jewelry.apple;
 
-import android.os.Bundle;
-import android.os.HandlerThread;
-import android.os.Looper;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.os.Handler;
-import jewelry.sellTicket.ticket;
-
 
 public class MainActivity extends AppCompatActivity {
-    private TextView text_view = null;
-    private int ticketnum;
-/*
-    private Button start = null;
-    private Button end = null;
-*/
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        text_view = (TextView)findViewById(R.id.text_view);
-        ticketnum = 30;
-        Handler handler = new Handler();
-        Runnable sellTicket = new ticket(ticketnum,text_view,handler);
-        Thread thd1 = new Thread(sellTicket);
-        thd1.start();
-       /* start = (Button)findViewById(R.id.start);
-        start.setOnClickListener(new StartClickListener());
-        end = (Button)findViewById(R.id.end);
-        end.setOnClickListener(new EndClickListener());
-*/
-    }
-
-    //使用handler时首先要创建一个handler
-/*    Handler handler = new Handler();
-    //要用handler来处理多线程可以使用runnable接口，这里先定义该接口
-    //线程中运行该接口的run函数
-    Runnable update_Thread = new Runnable()
+    public Button button;
+    private Button btn;
+//    这个的作用就是用来让鼠标只能实现一次点击功能的
+    private boolean isoncl=true;
+    private Handler mHandler=new Handler()
     {
-        public void run()
+        public void handleMessage(Message msg)
         {
-            //线程每次执行时输出"UpdateThread..."文字,且自动换行
-            //textview的append功能和Qt中的append类似，不会覆盖前面
-            //的内容，只是Qt中的append默认是自动换行模式
-            text_view.append("\nUpdateThread...");
-            //延时1s后又将线程加入到线程队列中
-            handler.postDelayed(update_Thread, 2000);
+            switch(msg.what)
+            {
+                case 1:
+                    button.setText(R.string.text2);
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
         }
     };
-
-    private class StartClickListener implements View.OnClickListener
-    {
-        public void onClick(View v) {
-                handler.post(update_Thread);
-                }
-
+    private Thread thread =new Thread(new Runnable() {
+        @Override
+        public void run() {
+            Log.e("111","111111");
+            Message message = new Message();
+            message.what=1;
+            mHandler.sendMessage(message);
         }
+    });
+    View.OnClickListener click = new View.OnClickListener(){
 
-    private class EndClickListener implements View.OnClickListener
-    {
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
         public void onClick(View v) {
-            handler.removeCallbacks(update_Thread);
+            if (isoncl){
+                thread.start();
+                isoncl=false;
+            }
         }
-
-    }*/
-
+    };
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        button = (Button) findViewById(R.id.button);
+        btn = (Button) findViewById(R.id.button2);
+        btn.setOnClickListener(click);
+    }
 }
