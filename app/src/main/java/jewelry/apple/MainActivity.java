@@ -1,5 +1,6 @@
 package jewelry.apple;
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -9,45 +10,34 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
-    public Button button;
-    private Button btn;
-//    这个的作用就是用来让鼠标只能实现一次点击功能的
-    private boolean isoncl=true;
-    private Handler mHandler=new Handler()
-    {
-        public void handleMessage(Message msg)
-        {
-            switch(msg.what)
-            {
+    private Button btn1;
+    private Button btn2;
+    private boolean isoncl;
+//    下面的这些部分都相当于变量的设定所以最后的部分都是需要打上双引号的.
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
                 case 1:
-                    button.setText(R.string.text2);
+                    btn1.setText(R.string.text2);
                     break;
                 default:
                     break;
             }
-            super.handleMessage(msg);
         }
     };
-    private Thread thread =new Thread(new Runnable() {
+    Thread thread =new Thread(new Runnable() {
         @Override
         public void run() {
-            Log.e("111","111111");
             Message message = new Message();
             message.what=1;
-            mHandler.sendMessage(message);
+            handler.sendMessage(message);
         }
     });
-    View.OnClickListener click = new View.OnClickListener(){
-
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param v The view that was clicked.
-         */
+    View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (isoncl){
+            if(isoncl){
                 thread.start();
                 isoncl=false;
             }
@@ -57,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = (Button) findViewById(R.id.button);
-        btn = (Button) findViewById(R.id.button2);
-        btn.setOnClickListener(click);
+        btn1= (Button) findViewById(R.id.button);
+        btn2= (Button) findViewById(R.id.button2);
+        btn2.setOnClickListener(clickListener);
     }
 }
