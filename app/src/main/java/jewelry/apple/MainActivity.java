@@ -2,6 +2,7 @@ package jewelry.apple;
 
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(isoncl){
+
                 thread.start();
                 isoncl=false;
             }
