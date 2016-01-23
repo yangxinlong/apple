@@ -100,4 +100,14 @@ public class Main3Activity extends AppCompatActivity {
         btn1.setOnClickListener(clickListener1);
         btn2.setOnClickListener(clickListener2);
     }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (childthread1.childhandler!=null){
+            childthread1.childhandler.getLooper().quit();
+        }
+        if (childthread2.childhandler!=null){
+            childthread2.childhandler.getLooper().quit();
+        }
+    }
 }
