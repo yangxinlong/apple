@@ -12,133 +12,92 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Main3Activity extends AppCompatActivity {
-    private  static final String TAG = "Main Thread";
-    private Handler mMainHandler =null;
-    private TextView info;
-    private Button msgBtn;
-    private Button btn1;
-    private int nclick=0;
-    ChildThread child1;
-    ChildThread child2;
-    class ChildThread extends Thread {
-        private Handler childHandler = null;
-        private int nClickTimes = 0;
-        private static final String CHILD_TAG = "childThread";
+    Handler mhandler ;
+    private TextView textView;
+    Button btn1;
+    Button btn2;
+    childThread childthread1;
+    childThread childthread2;
+    class childThread extends Thread{
+        private Handler childhandler;
+        private int nClickTimes=0;
 
         @Override
-        public void run() {
+        public void run(){
             this.setName("ChildThread");
-//            初始化信息队列
-            Looper.prepare();
-            childHandler = new Handler() {
+        Looper.prepare();
+            childhandler = new Handler(){
                 @Override
                 public void handleMessage(Message msg) {
-                    Log.i(CHILD_TAG, "childThread got msg from mainThread-" + msg.obj);
+
                     try {
-                        // 在子线程中可以做一些耗时的工作
-                        String sMsg = "";
+                        //子线程对主线程发过来的数据进行加工
+                        String sMsg="";
                         sleep(1000);
-                        Message toMain = new Message();
-                        // mMainHandler.obtainMessage();
-                        sMsg = String.valueOf(++nClickTimes);
-                        toMain.obj = sMsg + "This is "
-                                + this.getLooper().getThread().getName()
-                                + ".  你发送了消息: \"" + (String) msg.obj + "\"?"
-                                + "这是第" + sMsg + "次";
-                        mMainHandler.sendMessage(toMain);
-                        Message toChild = new Message();
-                        toChild.obj = "over";
-                        // mChildHandler.sendMessage(toChild);
-                        Log.i(CHILD_TAG, "childHandler Send a mesg to the mainThread - "
-                                + (String) toMain.obj);
+                        Message tomain =new Message();
+                        sMsg= String.valueOf(++nClickTimes);
+                        tomain.obj=sMsg+"--childThread--"+msg.obj;
+                        //子线程加工好的数据由主线程Handler负责发送
+                        mhandler.sendMessage(tomain);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                };
+                }
             };
-//            启动子线程消息循环队列
             Looper.loop();
         }
     }
+
+    View.OnClickListener clickListener1 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (childthread1.childhandler!=null) {
+                Message msg = childthread1.childhandler.obtainMessage();
+                msg.obj = "mhandler.getLooper().getThread().getName()--::"
+                        +mhandler.getLooper().getThread().getName()
+                        +"由btn1点击出发";
+                msg.sendToTarget();
+            }
+        }
+    };
+    View.OnClickListener clickListener2 =new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (childthread2.childhandler!=null){
+                Message msg = new Message();
+                msg.obj="mhandler.getLooper().getThread().getName()--::"
+                        +mhandler.getLooper().getThread().getName()
+                        +"由btn2点击触发";
+//                如果这个地方开始犯晕了用了mhandler那么最后就直接由mhandler来进行数据处理并显示
+                childthread2.childhandler.sendMessage(msg);
+/*                Message msg = childthread2.childhandler.obtainMessage();
+                msg.obj = "mhandler.getLooper().getThread().getName()--::"
+                        +mhandler.getLooper().getThread().getName()
+                        +"由btn2点击出发";
+                msg.sendToTarget();*/
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
-        info = (TextView) findViewById(R.id.info);
-        msgBtn = (Button) findViewById(R.id.msgBtn);
-        btn1 = (Button) findViewById(R.id.button6);
-        mMainHandler = new Handler() {
-
+        btn1 = (Button) findViewById(R.id.msgBtn);
+        btn2 = (Button) findViewById(R.id.msgBtn2);
+        textView = (TextView) findViewById(R.id.info);
+        mhandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                Log.i(TAG, "mMainHandler got the msg from childThread: - "
-                        + (String) msg.obj);
-
-                // 接收子线程的消息
-                info.setText((String) msg.obj);//String对msg.obj进行了强制类型转换
+                textView.setText((String) msg.obj);
             }
-
         };
-        child1 = new ChildThread();
-        child1.start();
-
-        child2 = new ChildThread();
-        child2.start();
-
-        msgBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                if (child1.childHandler != null) {
-
-                    // 发送消息给子线程
-                    Message childMsg = child1.childHandler.obtainMessage();
-                    Message msg = new Message();
-                    msg.obj = "mMainHandler.getLooper().getThread().getName():"+mMainHandler.getLooper().getThread().getName()
-                            + ";由线程1按钮点击触发";
-
-                    child1.childHandler.sendMessage(msg);
-                    Log.i(TAG, "child1.childHandler.sendMessage(msg) "
-                            + (String) msg.obj);
-                }
-            }
-        });
-
-        btn1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if (child2.childHandler != null) {
-
-                    // 发送消息给子线程  方法一
-/*                    Message msg = new Message();
-                    msg.obj = "mMainHandler.getLooper().getThread().getName():"+mMainHandler.getLooper().getThread().getName()
-                            + ";由线程2按钮点击触发";
-                    child2.childHandler.sendMessage(msg);*/
-                    //发送消息给子线程  方法二
-                    Message msg = child2.childHandler.obtainMessage();
-                    msg.obj = "mMainHandler.getLooper().getThread().getName():"+mMainHandler.getLooper().getThread().getName()
-                            + ";由线程2按钮点击触发";
-                    msg.sendToTarget();
-                    Log.i(TAG, "child2.childHandler.sendMessage(msg) - "
-                            + (String) msg.obj);
-                }
-            }
-        });
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "Stop looping the child thread's message queue");
-
-        if (child1.childHandler != null) {
-            child1.childHandler.getLooper().quit();
-        }
-        if (child2.childHandler != null) {
-            child2.childHandler.getLooper().quit();
-        }
+        childthread1 = new childThread();
+        childthread2=new childThread();
+        //线程一开启,线程里面设置好的looper就开始不停的旋转,寻找机会找到message队列进行相关的数据处理
+        childthread1.start();
+        childthread2.start();
+//        主线程通过handler向子线程发送数据
+        btn1.setOnClickListener(clickListener1);
+        btn2.setOnClickListener(clickListener2);
     }
 }
