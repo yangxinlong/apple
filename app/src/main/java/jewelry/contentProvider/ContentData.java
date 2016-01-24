@@ -9,7 +9,7 @@ import android.provider.*;
  * Created by yang on 16-1-24.
  */
 public class ContentData {
-    public static final String AUTHORITY = "hb.android.contentProvider";
+    public static final String AUTHORITY = "jewelry.contentProvider";
     public static final String DATABASE_NAME = "teacher.db";
     //创建 数据库的时候，都必须加上版本信息；并且必须大于4
     public static final int DATABASE_VERSION = 4;

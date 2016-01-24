@@ -46,5 +46,8 @@
             </intent-filter>
         </activity>
     </application>
+    <provider
+        android:name="TeacherContentProvider"
+        android:authorities="jewelry.apple" />
 
 </manifest>
