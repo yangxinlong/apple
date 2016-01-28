@@ -11,4 +11,7 @@
     <string name="querys">查询所有数据</string>
     <string name="update">修改</string>
     <string name="delete">删除</string>
+    <string name="login">登陆</string>
+    <string name="password">密码</string>
+    <string name="phoneName"><电话></电话></string>
 </resources>

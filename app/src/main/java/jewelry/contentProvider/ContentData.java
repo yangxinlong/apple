@@ -28,6 +28,7 @@ public class ContentData {
         /* 自定义匹配码 */
         public static final int TEACHER = 2;
 
+        public static final String _ID ="id";
         public static final String TITLE = "title";
         public static final String NAME = "name";
         public static final String DATE_ADDED = "date_added";
