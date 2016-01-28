@@ -6,7 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
+
+import jewelry.apple.Main7Activity;
+import jewelry.intent.Student;
 
 /**
  * Created by yang on 16-1-26.
@@ -50,6 +54,14 @@ public class myReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context,"意图实现",Toast.LENGTH_LONG).show();
+        String contextString = context.toString();
+//        contextString = contextString.substring(contextString.lastIndexOf(".") + 1, contextString.indexOf("@"));
+        Log.i("context对象", contextString);
+//        Log.i("李四","姓名："+li.getName()+"--性别："+li.getSex()+"--电话："+li.getPhone());
+        Intent in =new Intent(context,Main7Activity.class);
+        in.putExtra("li",intent.getParcelableExtra("li"));
+        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        context.startActivity(in);
     }
 }

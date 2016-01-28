@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/button2"
         android:text="广播意图"
-        android:onClick="broadCastIntent1"
+        android:onClick="sendCustomeIntent"
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true"/>
 
