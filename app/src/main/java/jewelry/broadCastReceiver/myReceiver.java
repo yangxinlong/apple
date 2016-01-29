@@ -60,6 +60,7 @@ public class myReceiver extends BroadcastReceiver {
 //        Log.i("李四","姓名："+li.getName()+"--性别："+li.getSex()+"--电话："+li.getPhone());
         Intent in =new Intent(context,Main7Activity.class);
         in.putExtra("li",intent.getParcelableExtra("li"));
+        in.putExtra("zhang",intent.getParcelableExtra("zhang"));
         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(in);
